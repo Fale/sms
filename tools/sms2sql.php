@@ -1,12 +1,17 @@
 <?php
 
-$var = file_get_contents( "1208inv.csv" );
+# Set these variables
+$phone = "+393283799681";
+$file = "file.csv";
+
+# Do not touch the code behind this line
+
+$var = file_get_contents( $file );
 $var = explode( "\n", $var );
 $fh = fopen( "sms.sql", 'a') or die( "can't open file" );
 
 foreach ( $var as $line=>$data )
 {
-//    echo $data . "\n";
     if ( preg_match( "/(.*)\;(.*);\"(.*)\";\"(.*)\";(.*);\"(.*)\";(.*);\"(.*)\"/", $data, $matches ) )
     {
         $matches[6] = str_replace( '.', '-', $matches[6] );
@@ -14,20 +19,18 @@ foreach ( $var as $line=>$data )
         if ( strlen( $matches[3] > 0 ) )
             $sql .= "'" . $matches[3] . "', "; 
         else 
-            $sql .= "'+393283799681', ";
+            $sql .= "'$phone', ";
         if ( strlen( $matches[4] > 0 ) )
             $sql .= "'" . $matches[4] . "', ";
         else 
-            $sql .= "'+393283799681', ";
+            $sql .= "'$phone', ";
         $sql .= "'" . $matches[6] . ":00', ";
         $sql .= "'" . urlencode( $matches[8] ) . "'),\n";
-       // echo $sql;
         fwrite( $fh, $sql );
-//       print_r($matches);
     }
     else
     {
-	echo ( $line . ' ERROR' );
+	echo ( $line + 1 . ' ERROR' );
     }
 }  
 
