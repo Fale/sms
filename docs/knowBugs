@@ -1,0 +1,4 @@
+- Importer
+	- Is not really usefull atm.
+	- Does not put a semicolomn on the last line of the sql query.
+
